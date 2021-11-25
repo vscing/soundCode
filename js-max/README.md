@@ -424,3 +424,6 @@ deepCopy(parent,child);
 console.log(child);
 
 ```
+
+#### polyfill  脏检查 https://china-dev.cn/  https://www.zhihu.com/question/391604647 https://juejin.cn/post/7022917788838658056
+#### https://www.zhihu.com/column/study-fe
