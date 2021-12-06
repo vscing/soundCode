@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object对象系列属性方法</title>
+</head>
+<body>
+  <iframe src="http://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor" width="100vw" height="100vh"></iframe>
+  <script type="text/javascript">
+    /** 
+     * Object.prototype.constructor
+     * 返回创建实例对象的 Object 构造函数的引用。注意，此属性的值是对函数本身的引用，而不是一个包含函数名称的字符串。对原始类型来说，如1，true和"test"，该值只可读。
+    */
+    function Tree(name) {
+      this.name = name;
+    }
+    let obj = new Tree('test');
+    console.dirxml(obj, obj.constructor);
+
+    /**
+     * Object.assign()
+     * Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象分配到目标对象。它将返回目标对象。
+     * Object.assign(target, ...sources)
+     * 目标对象。
+    */
+
+
+  </script>
+</body>
+</html>
