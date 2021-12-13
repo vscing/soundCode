@@ -138,8 +138,6 @@
     */
     let o = {};
     o.a = 1;
-    o.obj = {};
-    o.arr = [];
     // 等同于：
     Object.defineProperty(o, "a", {
       value: 1,
@@ -158,7 +156,12 @@
       enumerable: true
     });
 
+    o.obj = null;
+    o.arr = null;
+
     Object.defineProperty(o, 'obj', {
+      configurable: true,
+      enumerable: true,
       get: function() {
         console.log('get!');
       },
@@ -166,8 +169,13 @@
         console.log(value);
       }
     });
+    o.obj.c = 456
+    console.log(o.obj.c);
+
 
     Object.defineProperty(o, 'arr', {
+      configurable: true,
+      enumerable: true,
       get: function() {
         console.log('get!');
       },
@@ -176,7 +184,6 @@
       }
     });
     o.arr = [1,2,3];
-    o.arr[0] = 1;
     o.arr.push(2);
     console.log(o.arr);
     
