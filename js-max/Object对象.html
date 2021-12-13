@@ -459,6 +459,17 @@
     let frozen = Object.freeze({});
     Object.isExtensible(frozen); // === false
 
+    /** 
+     * Object.isFrozen()
+     * Object.isFrozen()方法判断一个对象是否被冻结
+     * Object.isFrozen(obj)
+     * 表示给定对象是否被冻结的Boolean
+    */
+    // 一个对象默认是可扩展的,所以它也是非冻结的.
+    Object.isFrozen({}); // === false
+
+    Object.preventExtensions();
+
 
 
   </script>
