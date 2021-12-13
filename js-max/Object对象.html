@@ -43,10 +43,10 @@
       }
     };
     let me = Object.create(Person);
-    console.dirxml(me);
+    console.dirxml('me', me);
     Person.prototype = { age:24 };
     let me2 = Object.create(Person.prototype);
-    console.dirxml(me2);
+    console.dirxml('me2', me2);
     function Parent(){
       this.name = "i am parent";
     }
@@ -138,8 +138,6 @@
     */
     let o = {};
     o.a = 1;
-    o.obj = {};
-    o.arr = [];
     // 等同于：
     Object.defineProperty(o, "a", {
       value: 1,
@@ -158,29 +156,308 @@
       enumerable: true
     });
 
+    let newObj = 'obj';
     Object.defineProperty(o, 'obj', {
       get: function() {
-        console.log('get!');
+        return newObj;
       },
       set: function(value) {
-        console.log(value);
+        console.log('obj setter');
+        newObj = value;
       }
     });
+    console.log(o.obj);
+    o.obj = { a: 123, b: 456 }; // 触发setter
+    console.log(o.obj);
+    o.obj.a = 789;
+    console.log(o.obj);
+    o.obj.c = 789;
+    console.log(o.obj);
 
+    let newArr = 'arr';
     Object.defineProperty(o, 'arr', {
       get: function() {
-        console.log('get!');
+        return newArr;
       },
       set: function(value) {
-        console.log(value);
+        console.log('arr setter');
+        newArr = value;
       }
     });
-    o.arr = [1,2,3];
+    console.log(o.arr);
+    o.arr = [1,2,3]; // 触发setter
+    console.log(o.arr);
     o.arr[0] = 1;
+    console.log(o.arr);
     o.arr.push(2);
     console.log(o.arr);
+
+    /** 
+     * Object.entries()
+     * Object.entries()方法返回一个给定对象自身可枚举属性的键值对数组，其排列与使用 for...in 循环遍历该对象时返回的顺序一致（区别在于 for-in 循环还会枚举原型链中的属性）。
+     * Object.entries(obj)
+     * 给定对象自身可枚举属性的键值对数组。
+    */
+    obj = {
+      a: '123',
+      b: '我擦'
+    }
+    console.log(Object.entries(obj));
+
+    /** 
+     * Object.freeze() 浅冻结
+     * Object.freeze() 方法可以冻结一个对象。一个被冻结的对象再也不能被修改；冻结了一个对象则不能向这个对象添加新的属性，不能删除已有属性，不能修改该对象已有属性的可枚举性、可配置性、可写性，以及不能修改已有属性的值。此外，冻结一个对象后该对象的原型也不能被修改。freeze() 返回和传入的参数相同的对象。
+     * Object.freeze(obj)
+     * 方法返回传递的对象，而不是创建一个被冻结的副本。
+    */
+    obj = {
+      prop: function() {},
+      foo: 'bar'
+    };
+
+    obj.foo = 'baz';
+    obj.lumpy = 'woof';
+    delete obj.prop;
+
+    console.log(obj);
+    o = Object.freeze(obj);
+    o.a = 123;
+    console.log(o);
+
+    // Object.defineProperty(obj, 'ohai', { value: 17 });
+
+    // Object.setPrototypeOf(obj, {x: 20});
+    // obj.__proto__ = {x: 20};
+    // 深冻结函数.
+    function deepFreeze(obj) {
+      // 取回定义在obj上的属性名
+      var propNames = Object.getOwnPropertyNames(obj);
+
+      // 在冻结自身之前冻结属性
+      propNames.forEach(function(name) {
+        var prop = obj[name];
+
+        // 如果prop是个对象，冻结它
+        if (typeof prop == 'object' && prop !== null)
+          deepFreeze(prop);
+      });
+
+      // 冻结自身(no-op if already frozen)
+      return Object.freeze(obj);
+    }
+
+    obj2 = {
+      internal: {}
+    };
+
+    deepFreeze(obj2);
+    // obj2.internal.a = 'anotherValue';
+    // obj2.internal.a; // undefined
+
+    /** 
+     * Object.fromEntries()
+     * Object.fromEntries() 方法把键值对列表转换为一个对象。
+     * Object.fromEntries(iterable); iterable: 类似 Array 、 Map 或者其它实现了可迭代协议的可迭代对象
+     * 一个由该迭代对象条目提供对应属性的新对象
+    */
+    let entries = new Map([
+      ['foo', 'bar'],
+      ['baz', 42]
+    ]);
+    console.log(Object.fromEntries(entries));
+    arr = [ ['0', 'a'], ['1', 'b'], ['2', 'c'] ];
+    console.log(Object.fromEntries(arr));
+
+    //处理对象的值
+    let object1 = { a: 1, b: 2, c: 3 };
+    let object2 = Object.fromEntries(
+      Object.entries(object1)
+      .map(([item, value]) => [item, value*2])
+    );
+
+    console.log(object2);
+
+    /** 
+     * Object.getOwnPropertyDescriptor()
+     * Object.getOwnPropertyDescriptor() 方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性）
+     * Object.getOwnPropertyDescriptor(obj, prop)
+     * 如果指定的属性存在于对象上，则返回其属性描述符对象（property descriptor），否则返回 undefined
+    */
+    o = { get foo() { return 17; } };
+    d = Object.getOwnPropertyDescriptor(o, "foo");
+    console.log(d);
+    o = { bar: 42 };
+    d = Object.getOwnPropertyDescriptor(o, "bar");
+    console.log(d);
+
+    o = {};
+    Object.defineProperty(o, "baz", {
+      value: 8675309,
+      writable: false,
+      enumerable: false
+    });
+    d = Object.getOwnPropertyDescriptor(o, "baz");
+    console.log(d);
     
-    
+    Object.getOwnPropertyDescriptor('foo', 0);
+    // 类型错误: "foo" 不是一个对象  // ES5 code
+
+    Object.getOwnPropertyDescriptor('foo', 0);
+    // Object returned by ES2015 code: {
+    //   configurable: false,
+    //   enumerable: true,
+    //   value: "f",
+    //   writable: false
+    // }
+
+    /** 
+     * Object.getOwnPropertyDescriptors()
+     * Object.getOwnPropertyDescriptors() 方法用来获取一个对象的所有自身属性的描述符。
+     * Object.getOwnPropertyDescriptors(obj)
+     * 所指定对象的所有自身属性的描述符，如果没有任何自身属性，则返回空对象。
+    */
+    // 浅拷贝一个对象
+    Object.create(
+      Object.getPrototypeOf(obj),
+      Object.getOwnPropertyDescriptors(obj)
+    );
+
+    // 创建子类
+    function superclass() {}
+    superclass.prototype = {
+      // 在这里定义方法和属性
+    };
+    function subclass() {}
+    subclass.prototype = Object.create(superclass.prototype, Object.getOwnPropertyDescriptors({
+      // 在这里定义方法和属性
+    }));
+
+    /** 
+     * Object.getOwnPropertyNames()
+     * Object.getOwnPropertyNames()方法返回一个由指定对象的所有自身属性的属性名（包括不可枚举属性但不包括Symbol值作为名称的属性）组成的数组。
+     * Object.getOwnPropertyNames(obj)
+     * 在给定对象上找到的自身属性对应的字符串数组。
+    */
+    arr = ["a", "b", "c"];
+    console.log(Object.getOwnPropertyNames(arr).sort()); // ["0", "1", "2", "length"]
+    obj = {a:1, b:2, c:3};
+    console.log(Object.getOwnPropertyNames(obj));
+    Object.getOwnPropertyNames('foo');
+    // TypeError: "foo" is not an object (ES5 code)
+
+    Object.getOwnPropertyNames('foo');
+    // ['length', '0', '1', '2']  (ES2015 code)
+
+    /** 
+     * Object.getOwnPropertySymbols()
+     * Object.getOwnPropertySymbols() 方法返回一个给定对象自身的所有 Symbol 属性的数组。
+     * Object.getOwnPropertySymbols(obj)
+     * 在给定对象自身上找到的所有 Symbol 属性的数组。
+    */
+    obj = {};
+
+    obj[Symbol("a")] = "localSymbol";
+    obj[Symbol.for("b")] = "globalSymbol";
+
+    let objectSymbols = Object.getOwnPropertySymbols(obj);
+
+    console.log(objectSymbols.length); // 2
+    console.log(objectSymbols)         // [Symbol(a), Symbol(b)]
+    console.log(objectSymbols[0])      // Symbol(a)
+
+    /** 
+     * Object.getPrototypeOf()
+     * Object.getPrototypeOf() 方法返回指定对象的原型（内部[[Prototype]]属性的值）。
+     * Object.getPrototypeOf(object)
+     * 给定对象的原型。如果没有继承属性，则返回 null 。
+    */
+    obj = {};
+    console.log(Object.getPrototypeOf(obj));
+    let prototype1 = {};
+    object1 = Object.create(prototype1);
+    console.log(Object.getPrototypeOf(object1));
+
+    proto = {};
+    obj = Object.create(proto);
+    Object.getPrototypeOf(obj) === proto; // true
+
+    let reg = /a/;
+    Object.getPrototypeOf(reg) === RegExp.prototype; // true
+
+    Object.getPrototypeOf('foo');
+    // TypeError: "foo" is not an object (ES5 code)
+    Object.getPrototypeOf('foo');
+    // String.prototype                  (ES2015 code)
+
+    /**
+     * Object.prototype.hasOwnProperty()
+     * hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性（也就是，是否有指定的键）。
+     * obj.hasOwnProperty(prop)
+     * 用来判断某个对象是否含有指定的属性的布尔值 Boolean。
+    */
+    o = new Object();
+    o.propOne = null;
+    o.hasOwnProperty('propOne'); // 返回 true
+    o.propTwo = undefined;
+    o.hasOwnProperty('propTwo'); // 返回 true
+
+    // 当hasOwnProperty方法被重写
+    foo = {
+      hasOwnProperty: function() {
+        return false;
+      },
+      bar: 'Here be dragons'
+    };
+    foo.hasOwnProperty('bar'); // 被重写了
+    ({}).hasOwnProperty.call(foo, 'bar'); // 直接使用原型链上真正的 hasOwnProperty 方法
+    Object.prototype.hasOwnProperty.call(foo, 'bar'); // Object 原型上的 hasOwnProperty 属性
+
+    /** 
+     * Object.is()
+     * Object.is() 方法判断两个值是否为同一个值。
+     * Object.is(value1, value2);
+     * 一个 Boolean 类型标示两个参数是否是同一个值。
+    */
+    Object.is('foo', 'foo');     // true
+    Object.is(window, window);   // true
+
+    Object.is('foo', 'bar');     // false
+    Object.is([], []);           // false
+
+    foo = { a: 1 };
+    bar = { a: 1 };
+    Object.is(foo, foo);         // true
+    Object.is(foo, bar);         // false
+
+    Object.is(null, null);       // true
+
+    // 特例
+    Object.is(0, -0);            // false
+    Object.is(0, +0);            // true
+    Object.is(-0, -0);           // true
+    Object.is(NaN, 0/0);         // true
+
+    /** 
+     * Object.isExtensible()
+     * Object.isExtensible() 方法判断一个对象是否是可扩展的（是否可以在它上面添加新的属性）
+     * Object.isExtensible(obj)
+     * 表示给定对象是否可扩展的一个Boolean
+    */
+    // 新对象默认是可扩展的.
+    let empty = {};
+    Object.isExtensible(empty);
+
+    // ...可以变的不可扩展.
+    Object.preventExtensions(empty);
+    Object.isExtensible(empty); // === false
+
+    // 密封对象是不可扩展的.
+    let sealed = Object.seal({});
+    Object.isExtensible(sealed); // === false
+
+    // 冻结对象也是不可扩展.
+    let frozen = Object.freeze({});
+    Object.isExtensible(frozen); // === false
 
 
 
