@@ -256,7 +256,7 @@
       return Object.freeze(obj);
     }
 
-    obj2 = {
+    let obj2 = {
       internal: {}
     };
 
@@ -275,7 +275,7 @@
       ['baz', 42]
     ]);
     console.log(Object.fromEntries(entries));
-    arr = [ ['0', 'a'], ['1', 'b'], ['2', 'c'] ];
+    let arr = [ ['0', 'a'], ['1', 'b'], ['2', 'c'] ];
     console.log(Object.fromEntries(arr));
 
     //处理对象的值
@@ -525,7 +525,7 @@
     Object.isFrozen(accessor) //=== true
 
     // 使用Object.freeze是冻结一个对象最方便的方法.
-    let frozen = { 1: 81 };
+    frozen = { 1: 81 };
     Object.isFrozen(frozen) //=== false
     Object.freeze(frozen);
     Object.isFrozen(frozen) //=== true
@@ -543,7 +543,7 @@
      * 表示给定对象是否被密封的一个Boolean 。
     */
     // 新建的对象默认不是密封的.
-    let empty = {};
+    empty = {};
     Object.isSealed(empty); // === false
 
     // 如果你把一个空对象变的不可扩展，则它同时也会变成个密封对象.
@@ -562,7 +562,7 @@
     Object.isSealed(hasProp); // === true
 
     // 最简单的方法来生成一个密封对象，当然是使用Object.seal.
-    let sealed = {};
+    sealed = {};
     Object.seal(sealed);
     Object.isSealed(sealed); // === true
 
@@ -584,11 +584,11 @@
      * 一个表示给定对象的所有可枚举属性的字符串数组。
      */
     // simple array
-    let arr = ['a', 'b', 'c'];
+    arr = ['a', 'b', 'c'];
     console.log(Object.keys(arr)); // console: ['0', '1', '2']
 
     // array like object
-    let obj = { 0: 'a', 1: 'b', 2: 'c' };
+    obj = { 0: 'a', 1: 'b', 2: 'c' };
     console.log(Object.keys(obj)); // console: ['0', '1', '2']
 
     // array like object with random key ordering
@@ -637,12 +637,12 @@
      * 已经不可扩展的对象。
      */
     // Object.preventExtensions将原对象变的不可扩展,并且返回原对象.
-    let obj = {};
-    let obj2 = Object.preventExtensions(obj);
+    obj = {};
+    obj2 = Object.preventExtensions(obj);
     obj === obj2;  // true
 
     // 字面量方式定义的对象默认是可扩展的.
-    let empty = {};
+    empty = {};
     Object.isExtensible(empty) //=== true
 
     // ...但可以改变.
@@ -652,13 +652,13 @@
     // 使用Object.defineProperty方法为一个不可扩展的对象添加新属性会抛出异常.
     let nonExtensible = { removable: true };
     Object.preventExtensions(nonExtensible);
-    Object.defineProperty(nonExtensible, "new", { value: 8675309 }); // 抛出TypeError异常
+    // Object.defineProperty(nonExtensible, "new", { value: 8675309 }); // 抛出TypeError异常
 
     // 在严格模式中,为一个不可扩展对象的新属性赋值会抛出TypeError异常.
     function fail()
     {
       "use strict";
-      nonExtensible.newProperty = "FAIL"; // throws a TypeError
+      // nonExtensible.newProperty = "FAIL"; // throws a TypeError
     }
     fail();
 
@@ -668,7 +668,7 @@
      * Object.seal(obj)
      * 被密封的对象。
     */
-    let obj = {
+    obj = {
       prop: function() {},
       foo: 'bar'
     };
@@ -679,7 +679,7 @@
     obj.lumpy = 'woof';
     delete obj.prop;
 
-    let o = Object.seal(obj);
+    o = Object.seal(obj);
 
     o === obj; // true
     Object.isSealed(obj); // === true
@@ -690,9 +690,9 @@
 
     // 但是你不能将属性重新定义成为访问器属性
     // 反之亦然
-    Object.defineProperty(obj, 'foo', {
-      get: function() { return 'g'; }
-    }); // throws a TypeError
+    // Object.defineProperty(obj, 'foo', {
+    //   get: function() { return 'g'; }
+    // }); // throws a TypeError
 
     // 除了属性值以外的任何变化，都会失败.
     obj.quaxxor = 'the friendly duck';
@@ -703,15 +703,15 @@
     // 在严格模式下，这样的尝试将会抛出错误
     function fail() {
       'use strict';
-      delete obj.foo; // throws a TypeError
-      obj.sparky = 'arf'; // throws a TypeError
+      // delete obj.foo; // throws a TypeError
+      // obj.sparky = 'arf'; // throws a TypeError
     }
     fail();
 
     // 通过Object.defineProperty添加属性将会报错
-    Object.defineProperty(obj, 'ohai', {
-      value: 17
-    }); // throws a TypeError
+    // Object.defineProperty(obj, 'ohai', {
+    //   value: 17
+    // }); // throws a TypeError
     Object.defineProperty(obj, 'foo', {
       value: 'eit'
     }); // 通过Object.defineProperty修改属性值
@@ -724,6 +724,25 @@
      * obj.toLocaleString();
      * 表示对象的字符串。
     */
+    obj = { a: 123 };
+    let res = Object.prototype.toLocaleString.call(obj);
+    console.log('toLocalString', res);
+
+    /** 
+     * Object.prototype.toString()
+     * toString() 方法返回一个表示该对象的字符串。
+     * obj.toString()
+     * 一个表示该对象的字符串。
+    */
+    let toString = Object.prototype.toString;
+
+    toString.call(new Date); // [object Date]
+    toString.call(new String); // [object String]
+    toString.call(Math); // [object Math]
+
+    //Since JavaScript 1.8.5
+    toString.call(undefined); // [object Undefined]
+    toString.call(null); // [object Null]
 
     /** 
      * Object.prototype.propertyIsEnumerable()
@@ -731,8 +750,11 @@
      * obj.propertyIsEnumerable(prop)
      * 用来表示指定的属性名是否可枚举的布尔值。
     */
-    let o = {};
-    let a = [];
+    console.log('length desc', Object.getOwnPropertyDescriptor(Array, 'length'));
+    console.log('array desc', Object.getOwnPropertyDescriptors(Array));
+    console.log('object desc', Object.getOwnPropertyDescriptors(Object));
+    o = {};
+    a = [];
     o.prop = 'is enumerable';
     a[0] = 'is enumerable';
 
@@ -748,24 +770,74 @@
     this.propertyIsEnumerable('Math');   // 返回 false
 
     /** 
+     * Object.prototype.valueOf()
+     * valueOf() 方法返回指定对象的原始值。
+     * object.valueOf()
+     * 返回值为该对象的原始值。
+    */
+    // Array：返回数组对象本身
+    let array1 = ["ABC", true, 12, -5];
+    console.log('valueOf', array1.valueOf(), array1.valueOf() === array1);   // true
+
+    // Date：当前时间距1970年1月1日午夜的毫秒数
+    let date1 = new Date(2013, 7, 18, 23, 11, 59, 230);
+    console.log('valueOf', date1.valueOf());   // 1376838719230
+
+    // Number：返回数字值
+    let num1 =  15.26540;
+    console.log('valueOf', num1.valueOf());   // 15.2654
+
+    // 布尔：返回布尔值true或false
+    let bool1 = true;
+    console.log('valueOf', bool1.valueOf(), bool1.valueOf() === bool1);   // true
+
+    // Function：返回函数本身
+    function foo(){}
+    console.log( foo.valueOf() === foo );   // true
+    let foo21 = new Function("x", "y", "return x + y;");
+    console.log('valueOf', foo21.valueOf(), foo21.valueOf() );
+
+    // Object：返回对象本身
+    obj = {name: "张三", age: 18};
+    console.log('valueOf', obj.valueOf(), obj.valueOf() === obj );   // true
+
+    // String：返回字符串值
+    str = "http://www.xyz.com";
+    console.log('valueOf', str.valueOf(), str.valueOf() === str );   // true
+
+    // new一个字符串对象
+    let str2 = new String("http://www.xyz.com");
+    // 两者的值相等，但不全等，因为类型不同，前者为string类型，后者为object类型
+    console.log('valueOf', str2.valueOf(), str2.valueOf() === str2 );   // false
+
+    /** 
      * Object.prototype.isPrototypeOf()
      * isPrototypeOf() 方法用于测试一个对象是否存在于另一个对象的原型链上。
      * prototypeObj.isPrototypeOf(object)
      * Boolean，表示调用对象是否在另一个对象的原型链上。
     */
+    console.warn(`isPrototypeOf() 与 instanceof 运算符不同。在表达式 "object instanceof AFunction"中，object 的原型链是针对 AFunction.prototype 进行检查的，而不是针对 AFunction 本身。`);
+    function C(){}
+    function D(){}
+
+    o = new C();
+    console.log(o instanceof C); // true，因为 Object.getPrototypeOf(o) === C.prototype
+    console.log(o instanceof D); // false，因为 D.prototype 不在 o 的原型链上
+    console.log(o.isPrototypeOf(D));
 
     /** 
-     * Object.setPrototypeOf()
-     * 
+     * Object.setPrototypeOf() 性能慢，避免使用。用Object.create()代替
+     * Object.setPrototypeOf() 方法设置一个指定的对象的原型 ( 即, 内部[[Prototype]]属性）到另一个对象或  null。
+     * Object.setPrototypeOf(obj, prototype)
+     * 返回新的对象
     */
-
-    /** 
-     * Object.prototype.toString()
-    */
-
-    /** 
-     * Object.prototype.valueOf()
-    */
+    let dict = Object.setPrototypeOf({}, {a: 123});
+    console.log('setPrototypeOf', dict, dict === {});
+    function Symbol1() {
+      this.isSymbol = 'yes';
+    }
+    let dict2 = Object.setPrototypeOf({}, new Symbol1());
+    console.log('setPrototypeOf', dict2)
 
 
   </script>
