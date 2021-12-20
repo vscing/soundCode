@@ -10,10 +10,9 @@ function MyPromise(fn) {
   // resovle回调处理
   function resolve(value){
     setTimeout(function(){
-      console.log(self.onResolvedCallback.toString());
+      console.log('执行了resolve');
       self.value = value;
       self.onResolvedCallback && self.onResolvedCallback(value);
-      self.onResolvedCallback(value);
     }, 0);
   }
 
@@ -23,6 +22,7 @@ function MyPromise(fn) {
       console.log('执行了reject')
       self.error = error;
       self.onRejectedCallback && self.onRejectedCallback(error);
+      // TODO cli模式不打印
       (function(){
         console.log('为啥不执行呢')
       })()
@@ -33,7 +33,6 @@ function MyPromise(fn) {
 }
 
 MyPromise.prototype.then = function(resolve, reject){
-  console.log('原型方法')
   this.onResolvedCallback = resolve;
   this.onRejectedCallback = reject;
 };
