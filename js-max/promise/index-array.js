@@ -35,7 +35,12 @@ function MyPromise(fn){
     }
   }
 
-  fn(resolve, reject);
+  // 异常处理
+  try {
+    fn(resolve, reject); // 执行callback并传入相应的参数
+  } catch(e) {
+    reject(e)
+  }
 }
 
 MyPromise.prototype.then = function(onFulfilled, onRejected){
