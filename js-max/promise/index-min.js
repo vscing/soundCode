@@ -22,7 +22,7 @@ function MyPromise(fn) {
       console.log('执行了reject')
       self.error = error;
       self.onRejectedCallback && self.onRejectedCallback(error);
-      // TODO cli模式不打印
+      // TODO cli模式不打印原理
       (function(){
         console.log('为啥不执行呢')
       })()
