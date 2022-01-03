@@ -1,3 +1,5 @@
+// 链式参数获取
+
 function getKeyVal(obj, key, val) {
   if(Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new TypeError('类型错误');
