@@ -216,3 +216,92 @@ for(var i=0;i<lis.length;i++){
   })(i);       //事件处理函数中闭包的写法
 }  
 
+// 例子11
+function m1(){
+  var x = 1;
+  return function(){
+       console.log(++x);
+  }
+}
+
+m1()();   //2
+m1()();   //2
+m1()();   //2
+
+var m2 = m1();
+m2();   //2
+m2();   //3
+m2();   //4
+
+// 例子12
+var  fn=(function(){
+  var  i=10;
+  function  fn(){
+     console.log(++i);
+  }
+  return   fn;
+})() 
+fn();   //11
+fn();   //12
+
+// 例子13
+function love1(){
+  var num = 223;
+  var me1 = function() {
+        console.log(num);
+  }
+  num++;
+  return me1;
+}
+var loveme1 = love1();
+loveme1();   //输出224
+
+// 例子14
+function fun(n,o) {
+  console.log(o);
+  return {
+       fun:function(m) {
+             return fun(m,n);
+       }
+  };
+}
+var a = fun(0);  //undefined
+a.fun(1);  //0  
+a.fun(2);  //0  
+a.fun(3);  //0  
+var b = fun(0).fun(1).fun(2).fun(3);   //undefined  0  1  2
+var c = fun(0).fun(1);  
+c.fun(2);  
+c.fun(3);  //undefined  0  1  1
+
+// 例子15
+function fn(){
+  var arr = [];
+  for(var i = 0;i < 5;i ++){
+  arr[i] = function(){
+    return i;
+  }
+  }
+  return arr;
+}
+var list = fn();
+for(var i = 0,len = list.length;i < len ; i ++){
+  console.log(list[i]());
+}  //5 5 5 5 5
+
+// 例子16
+function fn(){
+  var arr = [];
+  for(var i = 0;i < 5;i ++){
+	arr[i] = (function(i){
+		return function (){
+			return i;
+		};
+	})(i);
+  }
+  return arr;
+}
+var list = fn();
+for(var i = 0,len = list.length;i < len ; i ++){
+  console.log(list[i]());
+}  //0 1 2 3 4
