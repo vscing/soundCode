@@ -177,12 +177,12 @@ c();      //2
 // 例子8
 function f() { 
   var count = 0; 
-  return  function() { 
+  return function() { 
       count++; 
       console.info(count); 
   } 
 } 
-var t1 = f();
+var t1 = f(); // 闭包
 t1();     //1 
 t1();     //2 
 t1();     //3 
@@ -216,11 +216,14 @@ for(var i=0;i<lis.length;i++){
   })(i);       //事件处理函数中闭包的写法
 }  
 
+// for循环每次就是一个作用域， var有作用域提升功能，let没有。
+// 匿名函数（闭包）每次都重新开辟了一个空间，变量i追寻到当前值，var在{}作用域有提升，所以值保存的是循环后的。
+
 // 例子11
 function m1(){
   var x = 1;
   return function(){
-       console.log(++x);
+    console.log(++x);
   }
 }
 
@@ -228,10 +231,12 @@ m1()();   //2
 m1()();   //2
 m1()();   //2
 
-var m2 = m1();
+// m1() 返回一个匿名函数，每次调用都开辟了一个空间
+
+var m2 = m1(); // 开辟了一个空间
 m2();   //2
 m2();   //3
-m2();   //4
+m2();   //4 // 使用同一个空间
 
 // 例子12
 var  fn=(function(){
@@ -253,7 +258,7 @@ function love1(){
   num++;
   return me1;
 }
-var loveme1 = love1();
+var loveme1 = love1(); // 追寻最后结果
 loveme1();   //输出224
 
 // 例子14
@@ -278,9 +283,9 @@ c.fun(3);  //undefined  0  1  1
 function fn(){
   var arr = [];
   for(var i = 0;i < 5;i ++){
-  arr[i] = function(){
-    return i;
-  }
+    arr[i] = function(){
+      return i;
+    }
   }
   return arr;
 }
@@ -293,11 +298,11 @@ for(var i = 0,len = list.length;i < len ; i ++){
 function fn(){
   var arr = [];
   for(var i = 0;i < 5;i ++){
-	arr[i] = (function(i){
-		return function (){
-			return i;
-		};
-	})(i);
+    arr[i] = (function(i){
+      return function (){
+        return i;
+      };
+    })(i);
   }
   return arr;
 }
@@ -305,3 +310,6 @@ var list = fn();
 for(var i = 0,len = list.length;i < len ; i ++){
   console.log(list[i]());
 }  //0 1 2 3 4
+
+
+// 函数内部引用总是最新的，闭包是每次开辟时的上级作用域值
