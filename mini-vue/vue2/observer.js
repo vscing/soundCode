@@ -4,6 +4,7 @@ import Dep from './dep';
 // 数据劫持
 export default class Observer{ 
   constructor(data){
+    this.walk(data)
   }
 
   //再次申明，不考虑数组,只考虑对象

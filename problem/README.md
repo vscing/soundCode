@@ -49,5 +49,6 @@ vue-jsonschema-form
 
 10、monaco-editor 在线代码编辑插件
 
-参考：钉钉易搭
+参考：钉钉易搭、http://form.making.link/sample/#/zh-CN/ https://tally.so/create https://avuejs.com/
+
 https://x-render.gitee.io/form-render/
