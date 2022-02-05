@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>html5路由</title>
+</head>
+<body>
+  <a href="#/index">首页</a>
+  <a href="#/app">app</a>
+  <div id="app"></div>
+  <script type="text/javascript">
+    window.addEventListener('load', ()=>{
+      // 初始化url的hash模式，得到url地址，更改视图数据
+      let hash = location.hash;
+      hash?'':location.hash='/';
+      app.innerHTML = hash.slice(1);
+    })
+    window.addEventListener('hashchange',()=>{
+      // 获取到当前的值，改变视图
+      let hash = location.hash.slice(1);
+      app.innerHTML = hash;
+    })
+
+    // history
+    // {
+    //     // 如果为 / 说明第一次使用，否则用户改变了url，此时不做任何操作
+    //     location.pathname === '/' ? location.pathname = '/' : '';
+    //     window.addEventListener('load', () => {
+    //         this.history.current = location.pathname;
+    //     })
+    //     window.addEventListener('popstate', () => {
+    //         this.history.current = location.pathname;
+    //     })
+    // }
+
+    console.log(document.location, location, window.location)
+    console.log(document.location === location, document.location == location)
+    console.log(window.location === location, window.location == location)
+  </script>
+</body>
+</html>
