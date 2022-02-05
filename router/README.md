@@ -96,3 +96,6 @@ History.replaceState()
 ```
 - History必须同源，不能跨域。
 - History需要后端对所有的路由情况进行处理，否则就会404。
+
+### abstract
+- 其原理为用一个数组stack模拟出浏览器历史记录栈的功能
