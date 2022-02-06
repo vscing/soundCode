@@ -1,6 +1,11 @@
-### location对象
+# 路由
+
+## location对象
+
 - Location 接口表示其链接到的对象的位置（URL）。所做的修改反映在与之相关的对象上。 Document 和 Window 接口都有这样一个链接的Location，分别通过 Document.location和Window.location 访问。
+
 - Location 接口不继承任何属性，但是实现了那些来自 URLUtils 的属性。
+
 ```js
 * DOMString 是一个UTF-16字符串。由于JavaScript已经使用了这样的字符串，所以DOMString 直接映射到 一个String。
 
@@ -41,7 +46,9 @@ Location.password (en-US)
 # 包含页面来源的域名的标准形式DOMString。
 Location.origin (en-US) 只读
 ```
+
 - Location没有继承任何方法，但实现了来自URLUtils的方法。
+
 ```js
 Location 方法
 - 加载给定URL的内容资源到这个Location对象所关联的对象上。
@@ -57,9 +64,12 @@ Location.replace()
 Location.toString()
 ```
 
-### history对象
+## history对象
+
 - History 接口允许操作浏览器的曾经在标签页或者框架里访问的会话历史记录。
+
 - History 接口不继承于任何属性。
+
 ```js
 # History 属性
 
@@ -73,7 +83,9 @@ History.scrollRestoration (实验)
 # 返回一个表示历史堆栈顶部的状态的值。这是一种可以不必等待popstate (en-US) 事件而查看状态的方式。
 History.state （只读）
 ```
+
 - History 接口不继承任何方法。
+
 ```js
 - 在浏览器历史记录里前往上一页, 用户可点击浏览器左上角的返回(译者注：←)按钮模拟此方法. 等价于 history.go(-1)。Note: 当浏览器会话历史记录处于第一页时调用此方法没有效果，而且也不会报错。
 History.back()
@@ -94,8 +106,11 @@ Note: 在 Gecko 2.0 (Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1) 到 Gecko 5.0 
 
 History.replaceState()
 ```
+
 - History必须同源，不能跨域。
+
 - History需要后端对所有的路由情况进行处理，否则就会404。
 
-### abstract
+## abstract
+
 - 其原理为用一个数组stack模拟出浏览器历史记录栈的功能
