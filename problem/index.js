@@ -30,3 +30,16 @@ function getListKeyVal(obj, key, val) {
 }
 
 let arr =[0,1,0,2,3]
+
+/**
+ *  深层合并两个对象
+ * @param firstObject secondObject 两个object，不限制对象层级
+ * @return newObject 深层合并后的新对象
+ */
+function deepObjectMerge(firstObject, secondObject) {
+  for (const key in secondObject) {
+    firstObject[key] = firstObject[key] && Object.prototype.toString.call(firstObject[key]) === "[object Object]" ?
+    $deepObjectMerge(firstObject[key], secondObject[key]) : secondObject[key];
+  }
+  return firstObject;
+}
