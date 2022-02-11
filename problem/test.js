@@ -92,6 +92,38 @@ class D extends C { constructor() { super(); } }
 var c = new C(); // logs class C{constructor(){console.log(new.target);}}
 var d = new D(); // logs class D extends C{constructor(){super();}}
 
+// 单例模式
+class Storage {
+  obj = null;
+
+  static getInstance() {
+    if(this.obj) {
+      return this.obj;
+    } else {
+      this.obj = new Storage()
+      return this.obj;
+    }
+  }
+
+  setItem = (key, val) => {
+    localStorage.setItem(key, val)
+  }
+
+  getItem = (key) => {
+    localStorage.getItem(key)
+  }
 
 
+}
+const storage1 = Storage.getInstance()
+const storage2 = Storage.getInstance()
+
+storage1.setItem('name', '李雷')
+// 李雷
+storage1.getItem('name')
+// 也是李雷
+storage2.getItem('name')
+
+// 返回true
+storage1 === storage2
 
