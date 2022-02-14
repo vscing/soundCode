@@ -37,18 +37,21 @@
   </head>
   <body>
     <h2>拖放（Drag 和 drop）</h2>
-    <!-- 左边元素框 -->
-    <div id="left">
-      <label draggable="true" id="label0">index1</label>
-      <label draggable="true" id="label1">index2</label>
-      <label draggable="true" id="label2">index3</label>
-      <label draggable="true" id="label3">index4</label>
-      <label draggable="true" id="label4">index5</label>
-      <label draggable="true" id="label6">index7</label>
-      <label draggable="true" id="label5">index6</label>
+    <div>
+      <!-- 左边元素框 -->
+      <div id="left">
+        <label draggable="true" id="label0">index1</label>
+        <label draggable="true" id="label1">index2</label>
+        <label draggable="true" id="label2">index3</label>
+        <label draggable="true" id="label3">index4</label>
+        <label draggable="true" id="label4">index5</label>
+        <label draggable="true" id="label6">index7</label>
+        <label draggable="true" id="label5">index6</label>
+      </div>
+      <!-- 右边元素框 -->
+      <div id="right"></div>
     </div>
-    <!-- 右边元素框 -->
-    <div id="right"></div>
+    
     <script>
       var moveItem = document.getElementsByTagName('label');
 
@@ -108,5 +111,17 @@
         }
       }
     </script>
+    <div>
+      <h2>拖拽流程</h2>
+      <p>一个完整的drag and drop流程通常包含以下几个步骤:</p>
+      <ul>
+        <li>设置可拖拽目标.设置属性draggable="true"实现元素的可拖拽.</li>
+        <li>监听dragstart，通过DataTransfer设置拖拽数据</li>
+        <li>为拖拽操作设置反馈图标(可选)</li>
+        <li>设置允许的拖放效果，如copy,move,link</li>
+        <li>设置拖放目标，默认情况下浏览器阻止所有的拖放操作，所以需要监听dragenter或者dragover取消浏览器默认行为使元素可拖放.</li>
+        <li>监听drop事件执行所需操作</li>
+      </ul>
+    </div>
   </body>
 </html>
