@@ -41,13 +41,15 @@ vue-jsonschema-form
 
 6、Playground/表单Schema生成器/活动编辑器
 
-7、jsoneditor编辑器
+7、数据配置jsoneditor编辑器
 
 8、让你的站点也支持Markdown——showdown.js使用教程
 
 9、IntersectionObserver API 使用教程
 
 10、monaco-editor 在线代码编辑插件
+
+11、vue+antv g6+element-ui完整流程图
 
 参考：钉钉易搭、http://form.making.link/sample/#/zh-CN/ https://tally.so/create https://avuejs.com/
 
