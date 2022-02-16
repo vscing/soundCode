@@ -1,12 +1,8 @@
-# 前端模块化 Commonjs、AMD、CMD、UMD、ESM
+# 打包知识点
 
-
-## Commonjs
-
-## AMD和require.js
-
-## CMD和sea.js
-
-## UMD
-
-## ES6 Module
+- [前端模块化 Commonjs、AMD、CMD、UMD、ESM](https://zhuanlan.zhihu.com/p/467991875)
+- CommonJs 主要针对服务端，模块就是对象；即在输入时是先加载整个模块，生成一个对象，然后再从这个对象上面读取方法，这种加载称为“运行时加载”
+- AMD(require.js)是预加载，在并行加载js文件同时，还会解析执行该模块（因为还需要执行，所以在加载某个模块前，这个模块的依赖模块需要先加载完成）
+- CMD(sea.js)是懒加载，虽然会一开始就并行加载js文件，但是不会执行，而是在需要的时候才执行。
+- UMD是AMD和CommonJS的糅合
+- ES6 Module 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。编译时加载
