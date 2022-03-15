@@ -32,7 +32,10 @@ vue-jsonschema-form
 
 11、vue+antv g6+element-ui完整流程图
 
-参考：钉钉易搭、http://form.making.link/sample/#/zh-CN/ https://tally.so/create https://avuejs.com/
+参考：钉钉易搭、<http://form.making.link/sample/#/zh-CN/> <https://tally.so/create> <https://avuejs.com/>
 
-https://x-render.gitee.io/form-render/
+<https://x-render.gitee.io/form-render/>
+
+<https://formilyjs.org/zh-CN>
+
 ```
