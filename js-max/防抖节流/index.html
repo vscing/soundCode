@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>防抖和节流</title>
+</head>
+<body>
+  <div onscroll="cc(1,3,5)" style="height: 100px;
+  overflow: scroll;">
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+    <div style="height: 40px;">1233</div>
+  </div>
+  <script>
+    function debounce(fn, time) {
+      var timeId;
+      return function() {
+        var content = this, arg = arguments;
+        if(timeId) {
+          clearTimeout(timeId);
+        }
+        timeId = setTimeout(function() {
+          fn && fn.apply(content, arg);
+        }, time);
+      }
+    }
+    function throttle(fn, time) {
+      var startTime = Date.now();
+      return function() {
+        var content = this, arg = arguments;
+        var current = Date.now();
+        if(current - startTime > time) {
+          fn && fn.apply(content, arg)
+          startTime = Date.now();
+        }
+      }
+    }
+    function aa() {
+      console.log('触发', [...arguments], new Date());
+    }
+    var bb = debounce(aa, 3000);
+    var cc = throttle(aa, 3000);
+  </script>
+</body>
+</html>

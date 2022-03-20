@@ -1,0 +1,346 @@
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>HTML 拖放（Drag and Drop）</title>
+    <style>
+      h2 {
+        font-size: 20px;
+        color: #0d88c1;
+      }
+
+      div#left,
+      div#right {
+        width: 120px;
+        float: left;
+        margin: 10px 100px 10px 0px;
+        height: 240px;
+        background-color: #dddddd;
+        overflow-y: auto;
+      }
+
+      div label {
+        font-size: 22px;
+        font-weight: bold;
+        width: 100%;
+        display: inline-block;
+        padding: 4px 0;
+        text-align: center;
+        margin: 0px 0 2px 0;
+        color: #fff;
+        background-color: #0d88c1;
+      }
+      .over {
+        border: 1px dashed red;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>拖放（Drag 和 drop）</h2>
+    <div style="overflow: hidden;">
+      <!-- 左边元素框 -->
+      <div id="left">
+        <label draggable="true" id="label0">index1</label>
+        <label draggable="true" id="label1">index2</label>
+        <label draggable="true" id="label2">index3</label>
+        <label draggable="true" id="label3">index4</label>
+        <label draggable="true" id="label4">index5</label>
+        <label draggable="true" id="label6">index7</label>
+        <label draggable="true" id="label5">index6</label>
+      </div>
+      <!-- 右边元素框 -->
+      <div id="right"></div>
+    </div>
+    
+    <script>
+      var moveItem = document.getElementsByTagName('label');
+
+      for (let i = 0; i < moveItem.length; i++) {
+        //动态设置label元素id
+        moveItem[i].setAttribute('id', 'label' + i);
+        moveItem[i].ondragstart = function (ev) {
+            //dataTransfer.setData() 方法设置被拖数据的数据类型和值
+            ev.dataTransfer.setData("id", this.id);
+        };
+      }
+      document.getElementById('right').ondragover = function (ev) {
+        ev.preventDefault(); //阻止向上冒泡
+      }
+      document.getElementById('right').ondragenter = function (ev) {
+        ev.target.classList.add('over')
+      }
+      document.getElementById('right').ondragleave = function (ev) {
+        ev.target.classList.remove('over')
+      }
+      document.getElementById('right').ondrop = function (ev) {
+        ev.preventDefault();
+        ev.target.classList.remove('over')
+        var id = ev.dataTransfer.getData('id');
+        var elem = document.getElementById(id); //当前拖动的元素
+        var toElem = ev.toElement.id; //放置位置
+        if (toElem == 'right') {
+          //如果为container,元素放置在末尾
+          this.appendChild(elem);
+        } else {
+          //如果为container里的元素，则插入该元素之前
+          this.insertBefore(elem, document.getElementById(toElem));
+        }
+      }
+
+      document.getElementById('left').ondragover = function (ev) {
+        ev.preventDefault(); //阻止向上冒泡
+      }
+      document.getElementById('left').ondragenter = function (ev) {
+        ev.target.classList.add('over')
+      }
+      document.getElementById('left').ondragleave = function (ev) {
+        ev.target.classList.remove('over')
+      }
+      document.getElementById('left').ondrop = function (ev) {
+        console.log(ev)
+        ev.preventDefault();
+        ev.target.classList.remove('over')
+        var id = ev.dataTransfer.getData('id');
+        var elem = document.getElementById(id);
+        var toElem = ev.toElement.id;
+        if (toElem == 'left') {
+          //如果为container,元素放置在末尾
+          this.appendChild(elem);
+        } else {
+          //如果为container里的元素，则插入该元素之前
+          this.insertBefore(elem, document.getElementById(toElem));
+        }
+      }
+    </script>
+    <div>
+      <h2>拖拽流程</h2>
+      <p>一个完整的drag and drop流程通常包含以下几个步骤:</p>
+      <ul>
+        <li>设置可拖拽目标.设置属性draggable="true"实现元素的可拖拽.</li>
+        <li>监听dragstart，通过DataTransfer设置拖拽数据</li>
+        <li>为拖拽操作设置反馈图标(可选)</li>
+        <li>设置允许的拖放效果，如copy,move,link</li>
+        <li>设置拖放目标，默认情况下浏览器阻止所有的拖放操作，所以需要监听dragenter或者dragover取消浏览器默认行为使元素可拖放.</li>
+        <li>监听drop事件执行所需操作</li>
+      </ul>
+      <p>如果draggable属性被禁止或者设置为false，那么这个元素不能被拖拽。draggable属性可以在任何属性上设置。当一个元素设置为可拖，在这个元素上点击或拖动鼠标，这个元素里的文本或其他元素不会被选中。当用户开始拖动，dragstart事件会被触发，在dragstart事件中，你能够通过setData()指定拖拽数据，通过setDragImage()指定图片反馈，以及通过设置effectAllowed属性和dropEffect属性指定拖拽效果。拖拽数据是必须指定的，但是图片反馈是拖拽效果不是必须的</p>
+      <h2>DragEvent是一个表示drag和drop交互的DOM event接口。
+        用户通过将指针设备（如：鼠标）放在目标的表面开始拖动，然后拖动指针到一个新的位置（如其他DOM元素）。
+        应用程序自动的解析拖放交互。DragEvent接口从mouseEvent和Event那儿继承属性。</h2>
+      <p>DragEvent并不是一个单一的事件，它包含了多个事件，这些事件分别是：drag，dragstart，dragenter，dragend，dragover，dragexit，dragleave，drop。</p>  
+      <ul>
+        <li>drag：这个事件在元素拖拽的过程中反复触发，每一百毫秒触发一次。这事件的目标元素是被拖的那个元素，该事件可冒泡，可取消默认行为。</li>
+        <li>dragstart：这个事件在用户开始拖动时触发。这个事件的目标元素是被拖的那个元素，在这些事件中，dragstart事件最先触发。该事件可冒泡，可取消默认行为。</li>
+        <li>dragenter：这个事件在被拖的元素进入一个合法的可drop目标时触发。这个事件的目标元素是这个可drop目标。该事件可冒泡，可取消默认行为。</li>
+        <li>dragover：当被拖的元素在可drop目标范围内移动时反复触发这个事件，一百毫秒触发一次。这个事件的目标元素是这个可drop目标。该事件可冒泡，可取消默认行为。</li>
+        <li>dragend：当拖拽结束时触发这个事件，这个事件的目标元素是被拖的元素。在这些事件中dragend最后触发。该事件可冒泡，不能取消默认行为。</li>
+        <li>dragleave：这个事件在被拖得元素离开合法的可drop目标时触发。这个事件的目标元素是这个可drop目标。该事件可冒泡，不能取消默认行为。</li>
+        <li>dragexit：当一个可drop元素不再是拖拽操作最近的drop目标时触发这个事件。这个事件的目标元素是这个可drop元素。该事件可冒泡，不能取消默认行为。</li>
+        <li>drop：当在可drop目标上松开拖动元素的指针设备时触发这个事件，该事件的目标元素是这个可drop目标。drop事件在dragend事件触发之前触发。这个事件可冒泡，可取消默认行为。</li>
+      </ul>
+      <h2>拖拽数据</h2>
+      <p>拖拽数据包含两部分信息，分别是数据的类型和数据的值，数据的类型是字符串，数据的值也是字符串形式。 拖拽数据的类型有：text/plain,text/html,image/jpeg,text/uri-list等，还能够自定义类型。
+
+        可以多次调用setData()方法设置多个拖拽数据。如下：
+        
+        var dt = event.dataTransfer;
+        dt.setData("application/x-bookmark",bookmarkString);
+        dt.setData('text/uri-list','www.baidu.com');
+        dt.setData('text/plain','drag data');
+        application/x-bookmark是自定义类型。
+        
+        如果通过这个方法设置新的类型的数据，那么这个新的拖拽数据会位于拖拽数据列表的尾部，如果设置以及存在的类型的数据，那么新的数据会覆盖旧的数据。
+        
+        通过getData()能够得到指定类型的拖拽数据
+        
+        通过clearData()能够清除指定类型的拖拽数据</p>
+      <h2>图片反馈</h2>  
+      <p>图片反馈并不是必须设置的，默认它是从拖拽目标上生成的一个半透明图片，并且这个图片在拖拽期间会跟着鼠标移动。你能够通过setDragImage(image,xOffect,yOffect)方法自定义图片反馈。
+
+        setDragImage()接受三个参数，第一个参数表示图片引用，第二个和第三个表示图片左上角相对于鼠标指针的位置。单位是像素</p>
+        <!-- <!DOCTYPE html>
+        <html>
+        <head lang="en">
+            <meta charset="UTF-8">
+            <title>test target</title>
+            <style type="text/css">
+                #drag{
+                    width:200px;
+                    height:200px;
+                    background-color: aqua;
+                }
+                .drop{
+                    width: 300px;
+                    height: 300px;
+                    background-color: antiquewhite;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="drag" draggable="true" ondragstart="event.dataTransfer.setData('text/plain','dddd')">
+                我可以拖动
+            </div>
+            <img src="test.jpg" id="img">
+            <div class="drop"></div>
+            <script type="text/javascript">
+              
+                document.addEventListener('dragstart',function(event){
+                    event.target.style.backgroundColor = 'red';
+                    event.dataTransfer.setDragImage(document.getElementById('img'),30,30);
+        
+                },false);
+               
+            </script>
+        </body>
+        </html>
+        复制代码-->
+        <h2>拖拽效果</h2>
+        <p>通过设置effectAllowed和dropEffect可以指定拖拽效果</p>
+        
+        <p>事件对象的dataTransfer属性</p>
+        <p>dataTransfer属性是一个DataTransfer对象，在这个属性中保存了拖拽操作过程中的数据，它可能保存一个或者多个数据项。这个属性是只读的。
+        
+        dataTransfer属性中的标准属性
+        1.dropEffect
+        
+        得到当前drag and drop操作的类型，或者设置给当前drag and drop 设置新的类型。这个属性可能取值是none，copy，move，link。这属性会影响拖拽过程中的鼠标的显示形式。
+        
+        2.effectAllowed
+        
+        这个属性用于指定运行的拖拽操作效果，可选的值有none，all，copy，move，link，copyLink，copyMove，linkMove。默认情况这个值是all，如果要设置这个属性的值就要在dragstart的事件处理程序里进行设置。
+        
+        3.files
+        
+        包含了在data transfer中的所有可用的本地文件列表，如果被拖拽操作没有涉及文件，那么它是一个空列表。
+        
+        4.items
+        
+        是一个包含了所有拖拽数据的列表。它是一个DataTransferItemList对象。
+        
+        5.types
+        
+        它是一个字符串数组，这个数组中包含在dragstart事件处理程序中设置的拖拽事件的类型，如果拖拽操作不存在数据，那么他得到一个空数组。
+        </p>
+        <h2>DataTransfer属性的标准方法</h2>
+        <p>1.clearData(type):移除给定类型相关的拖拽数据。接受一个可选的参数，如果这个参数是空或者没有指定，那么移除所以类型的数据，如果指定的类型不存在或者data transfer中不包含数据，那么这个方法不会产生什么影响。
+        
+        2.getData(type):得到指定类型的拖拽数据。如果指定类型的数据不存在或者data transfer中不包含数据， 得到一个空的字符串。
+        
+        3.setData(type，value):设置给定类型的拖拽数据。接受两个参数，第一个参数是类型，第二个参数是指定类型的值。 如果这个类型的值不存在，那么在类型列表的最后添加一个新的格式，如果已经存在的,那么在相同的位置 存在的数据被替换.
+        
+        4.setDragImage(image，xoffset，yoffset):接受三个参数，第一个参数是图片的引用，第二个和第三个参数是移动的图片的 左上角相对鼠标的位置。
+        </p>
+        <h2>DataTransferItemList对象</h2>
+        <p>通过dataTransfer.items得到的值就是DataTransferList对象。
+        
+        DataTransferItemList对象的属性
+        1.length:得到拖拽数据的数量
+        
+        DataTransferItemList对象的方法
+        1.add()：向拖拽数据列表中添加一个新的拖拽数据，添加成功后返回这个新的拖拽数据。当添加一个文件到拖拽数据列表中，这个方法只接受一个文件对象作为参数。当添加一个给定 类型的字符串到拖拽数据列表中，这个方法接受两个参数，第一个参数是数据，第二个参数是类型。
+        
+        2.remove(index):从拖拽数据列表中移除指定位置的拖拽数据。这个方法接受一个表示位置的参数，如果这个参数小于0或者大于拖拽数据列表的长度，拖拽数据列表不会发生改变。
+        
+        3.clear():移除拖拽数据列表中所有的拖拽数据。不需要参数。
+        
+        4.DataTransferItem(index):得到指定位置上的拖拽数据。接受一个表示位置的参数， 这个方法简写形式是数组索引。
+        </p>
+        <h2>DataTransferItem对象</h2>
+        <p>
+        dataTransfer.items中的每一项都是DataTransferItem对象。
+        
+        DataTransferItem对象的属性
+        1.kind：得到拖拽数据的键，可能的值有file和string
+        
+        2.type：得到拖拽数据的类型，是MINE type
+        
+        DataTransferItem对象的方法
+        1.getAsFile():返回拖拽数据的文件对象。如果拖拽数据不是文件则返回null
+        
+        2.getAsString(function):调用回调函数，这个回调函数将拖拽数据项的字符串形式作为它的参数
+        
+        拖拽文件
+        要使文件能够被拖放的一个重要步骤是定义一个放置区域。并且为放置区域添加drop，dragover和dragend事件处理程序。
+        
+        当为一个元素添加drop事件的处理程序，及在dragover事件处理程序中取消浏览器的默认行为，那么这个元素就是放置区域。
+        
+        另外，在drag和drop操作结束之后，应用程序应该移除拖拽数据（可能是一个或者多个文件），数据的清理通常在 dragend事件处理程序中。
+      </p><p>
+        <!-- <div id="drop_zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend = "dragend_handler(event)">
+          <strong><Drag one or more files to this Drop Zone ...</strong>
+        </div> -->
+         
+        
+        例子一，访问文件名
+        
+        <!-- 复制代码
+        function drop_handler(ev) {
+          console.log("Drop");
+          ev.preventDefault();
+          // If dropped items aren't files, reject them
+          var dt = ev.dataTransfer;
+          if (dt.items) {
+            // Use DataTransferItemList interface to access the file(s)
+            for (var i=0; i < dt.items.length; i++) {
+              if (dt.items[i].kind == "file") {
+                var f = dt.items[i].getAsFile();
+                console.log("... file[" + i + "].name = " + f.name);
+              }
+            }
+          } else {
+            // Use DataTransfer interface to access the file(s)
+            for (var i=0; i < dt.files.length; i++) {
+              console.log("... file[" + i + "].name = " + dt.files[i].name);
+            }
+          }
+        }
+        复制代码 -->
+        例子二，阻止浏览器默认行为
+        
+        <!-- function dragover_handler(ev) {
+          console.log("dragOver");
+          // Prevent default select and drag behavior
+          ev.preventDefault();
+        } -->
+         例子三，清除数据
+        
+        复制代码
+        <!-- function dragend_handler(ev) {
+          console.log("dragEnd");
+          // Remove all of the drag data
+          var dt = ev.dataTransfer;
+          if (dt.items) {
+            // Use DataTransferItemList interface to remove the drag data
+            for (var i = 0; i < dt.items.length; i++) {
+              dt.items.remove(i);
+            }
+          } else {
+            // Use DataTransfer interface to remove the drag data
+            ev.dataTransfer.clearData();
+          }
+        }-->
+      </p> 
+      <h2>DataTransfer对象</h2>
+      <p>
+        拖拽事件周期中会初始化一个DataTransfer对象,用于保存拖拽数据和交互信息.以下是它的属性和方法.
+        
+        dropEffect: 拖拽交互类型,通常决定浏览器如何显示鼠标光标并控制拖放操作.常见的取值有copy,move,link和none
+        effectAllowed: 指定允许的交互类型,可以取值:copy,move,link,copyLink,copyMove,limkMove, all, none默认为uninitialized(允许所有操作)
+        files: 包含File对象的FileList对象.从操作系统向浏览器拖放文件时有用.
+        types: 保存DataTransfer对象中设置的所有数据类型.
+        setData(format, data): 以键值对设置数据,format通常为数据格式,如text,text/html
+        getData(format): 获取设置的对应格式数据,format与setData()中一致
+        clearData(format): 清除指定格式的数据
+        setDragImage(imgElement, x, y): 设置自定义图标
+        dataTransfer对象在传递给监听器的事件对象中可以访问,如下:
+        
+        draggableElement.addEventListener('dragstart', function (event) {
+          event.dataTransfer.setData('text', 'Hello World');
+        }, false);</p>
+        <h2>文档</h2>
+        <p>https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API</p>
+        <p>https://developer.mozilla.org/zh-CN/docs/Web/API/DragEvent</p>
+        <p>https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer</p>
+    </div>
+  </body>
+</html>
