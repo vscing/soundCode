@@ -32,3 +32,5 @@
 - **react和vue的区别**
 - **同源策略**
 - **跨域几种方案，如何处理cookie**
+- **indexDB**
+- **websql**
